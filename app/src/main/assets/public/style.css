@@ -1,0 +1,361 @@
+/* "Firing For Cash" Cyberpunk Neon Theme stylesheet */
+:root {
+  --neon-cyan: #00f3ff;
+  --neon-magenta: #ff0055;
+  --neon-green: #39ff14;
+  --neon-yellow: #fffb00;
+  --cyber-bg: #05050e;
+  --cyber-card: #0c0d21;
+  --cyber-border: #1f2244;
+  --font-family: 'Courier New', Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  user-select: none;
+}
+
+body {
+  background-color: var(--cyber-bg);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(31, 34, 68, 0.4) 0%, transparent 80%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 100%, 100% 4px, 6px 100%;
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container */
+#app-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  border-left: 2px solid var(--cyber-border);
+  border-right: 2px solid var(--cyber-border);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+}
+
+/* Utility Header / Main Title Click Trigger */
+header {
+  padding: 15px;
+  background-color: rgba(12, 13, 33, 0.95);
+  border-bottom: 2px solid var(--neon-cyan);
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 243, 255, 0.2);
+}
+
+h1.app-title {
+  color: var(--neon-cyan);
+  font-size: 24px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px var(--neon-cyan);
+  cursor: pointer;
+}
+
+h1.app-title span {
+  color: var(--neon-magenta);
+  text-shadow: 0 0 10px var(--neon-magenta);
+}
+
+/* Screens */
+.screen {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* Cyber Panels & Cards */
+.cyber-card {
+  background: var(--cyber-card);
+  border: 1px solid var(--cyber-border);
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.cyber-card.cyan-border {
+  border-left: 4px solid var(--neon-cyan);
+}
+
+.cyber-card.magenta-border {
+  border-left: 4px solid var(--neon-magenta);
+}
+
+.cyber-card.green-border {
+  border-left: 4px solid var(--neon-green);
+}
+
+/* Neon Text & Labels */
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+.neon-text-magenta {
+  color: var(--neon-magenta);
+  text-shadow: 0 0 8px var(--neon-magenta);
+}
+
+.neon-text-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 8px var(--neon-green);
+}
+
+.neon-text-yellow {
+  color: var(--neon-yellow);
+  text-shadow: 0 0 8px var(--neon-yellow);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.cyber-input {
+  width: 100%;
+  background: rgba(5, 5, 14, 0.8);
+  border: 1px solid var(--cyber-border);
+  padding: 12px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.cyber-input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+}
+
+/* Cyber Buttons */
+.cyber-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1.5px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+  margin-bottom: 10px;
+}
+
+.cyber-btn:hover {
+  background: var(--neon-cyan);
+  color: #000;
+  box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+.cyber-btn.btn-magenta {
+  border-color: var(--neon-magenta);
+  color: var(--neon-magenta);
+  text-shadow: 0 0 5px var(--neon-magenta);
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.1);
+}
+
+.cyber-btn.btn-magenta:hover {
+  background: var(--neon-magenta);
+  color: #000;
+  box-shadow: 0 0 15px var(--neon-magenta);
+}
+
+.cyber-btn.btn-green {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  text-shadow: 0 0 5px var(--neon-green);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.1);
+}
+
+.cyber-btn.btn-green:hover {
+  background: var(--neon-green);
+  color: #000;
+  box-shadow: 0 0 15px var(--neon-green);
+}
+
+/* Canvas Viewport */
+.game-viewport {
+  position: relative;
+  flex: 1;
+  background: #010105;
+  border: 2px solid var(--cyber-border);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000000;
+}
+
+/* HUD Overlay on Canvas */
+.canvas-hud {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-family);
+  font-size: 14px;
+}
+
+/* Withdrawal Panel Dialog */
+.withdraw-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Leaderboards styling */
+.leaderboard-list {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px dashed var(--cyber-border);
+  font-size: 12px;
+}
+
+.leaderboard-item:first-child {
+  color: var(--neon-yellow);
+  font-weight: bold;
+}
+
+/* Network Loss overlay */
+#network-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(5, 5, 14, 0.95);
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+#network-overlay.visible {
+  display: flex;
+}
+
+/* Admin Dashboard Gate CSS */
+.secret-terminal {
+  background: #020205 !important;
+  border: 1px solid var(--neon-magenta) !important;
+  color: var(--neon-green);
+  font-family: monospace;
+}
+
+.secret-terminal label {
+  color: var(--neon-magenta);
+}
+
+.secret-terminal input {
+  color: var(--neon-green);
+  border-color: var(--neon-magenta);
+}
+
+/* Bottom Nav bar */
+nav.bottom-nav {
+  display: flex;
+  background-color: var(--cyber-card);
+  border-top: 2px solid var(--cyber-border);
+}
+
+.nav-tab {
+  flex: 1;
+  padding: 12px 0;
+  text-align: center;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #7b889b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-tab i {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+
+.nav-tab.active {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 5px var(--neon-cyan);
+  background: rgba(0, 243, 255, 0.05);
+  border-top: 2px solid var(--neon-cyan);
+}
+
+/* Wallet Balance layout */
+.balance-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
+.balance-box {
+  text-align: center;
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--cyber-border);
+}
+
+.balance-box span {
+  display: block;
+}
+
+.balance-val {
+  font-size: 20px;
+  font-weight: bold;
+}

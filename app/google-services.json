@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "845367218033",
+    "project_id": "firing-for-cash-default-rtdb",
+    "storage_bucket": "firing-for-cash-default-rtdb.appspot.com",
+    "firebase_url": "https://firing-for-cash-default-rtdb.asia-southeast1.firebasedatabase.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845367218033:android:91bffd7f28bfc030c3b0d0",
+        "android_client_info": {
+          "package_name": "com.firingforcash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLcLS6yNIBCf2P3oxUIJ0XX6tBN8ZhC6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

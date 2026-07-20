@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Firing For Cash</title>
+  
+  <!-- Cyberpunk fonts & CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Firebase SDKs (Compatibility Mode for reliable local asset loading) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+</head>
+<body>
+
+  <div id="app-container">
+    
+    <!-- Header with Click Trigger Gateway -->
+    <header>
+      <h1 class="app-title" id="secret-title-trigger">FIRING FOR <span>CASH</span></h1>
+      <div id="connection-status" style="font-size: 10px; color: var(--neon-green); margin-top: 5px;">SYS_ACTIVE: ONLINE</div>
+    </header>
+
+    <!-- NETWORK OFFLINE OVERLAY -->
+    <div id="network-overlay">
+      <div class="cyber-card magenta-border" style="width: 100%; max-width: 350px;">
+        <h2 class="neon-text-magenta" style="margin-bottom: 15px;">ACCESS_NETWORK_STATE ERROR</h2>
+        <p style="font-size: 13px; line-height: 1.6; margin-bottom: 20px; color: #aaa;">
+          CONNECTION TERMINATED. GAMEPLAY AND SYNC SUSPENDED UNTIL STABLE CELLULAR OR WI-FI CONNECTION RE-ESTABLISHED.
+        </p>
+        <div style="border: 1px dashed var(--neon-magenta); padding: 10px; font-size: 11px; color: var(--neon-magenta);">
+          PINGING BACKEND...
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: AUTHENTICATION -->
+    <div id="screen-auth" class="screen active">
+      <div class="cyber-card cyan-border" style="margin-top: 10%;">
+        <h3 class="neon-text-cyan" style="margin-bottom: 15px; letter-spacing: 1px;">// INITIALIZE_SESSION</h3>
+        
+        <form id="auth-form">
+          <div class="form-group">
+            <label for="auth-email">USER_EMAIL</label>
+            <input type="email" id="auth-email" class="cyber-input" placeholder="enter email address" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-password">SECURE_PASSCODE</label>
+            <input type="password" id="auth-password" class="cyber-input" placeholder="••••••••" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-referral">REFERRAL_CODE (OPTIONAL)</label>
+            <input type="text" id="auth-referral" class="cyber-input" placeholder="e.g. CASH999">
+          </div>
+          
+          <button type="submit" class="cyber-btn" style="margin-top: 10px;">SIGN_IN_OR_REGISTER</button>
+        </form>
+      </div>
+      
+      <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #555;">
+        SECURE INTEGRITY CONTROL ENGINE v1.4.0
+      </div>
+    </div>
+
+    <!-- SCREEN 2: MAIN DASHBOARD -->
+    <div id="screen-dashboard" class="screen">
+      <div class="cyber-card cyan-border">
+        <h4 class="neon-text-cyan" id="user-display-email" style="font-size: 13px; margin-bottom: 10px;">USER: null</h4>
+        
+        <div class="balance-container">
+          <div class="balance-box">
+            <span style="font-size: 9px; color: var(--neon-cyan);">CYBER_COINS</span>
+            <span class="balance-val neon-text-cyan" id="dash-cyber-coins">0</span>
+          </div>
+          <div class="balance-box">
+            <span style="font-size: 9px; color: var(--neon-green);">EST_EARNINGS</span>
+            <span class="balance-val neon-text-green" id="dash-earnings">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Play game entry card -->
+      <div class="cyber-card green-border">
+        <h4 class="neon-text-green" style="margin-bottom: 10px;">// INVASION_ALIVE</h4>
+        <p style="font-size: 12px; line-height: 1.5; color: #ccc; margin-bottom: 15px;">
+          Space defenders detected. Shoot incoming target nodes. 20 target destructions yields exactly 1 Virtual Cyber Coin. Prevent automated botting limits.
+        </p>
+        <button class="cyber-btn btn-green" id="btn-launch-game">LAUNCH_SHOOTER</button>
+      </div>
+
+      <!-- Simulated Ad Monetization Math Card -->
+      <div class="cyber-card magenta-border">
+        <h4 class="neon-text-magenta" style="margin-bottom: 10px;">// AD_METRICS_SIMULATOR</h4>
+        <div style="font-size: 11px; line-height: 1.6; color: #aaa;">
+          <div><span style="color: var(--neon-magenta);">REWARDED eCPM:</span> ₹70.00 / 1K IMPS</div>
+          <div><span style="color: var(--neon-cyan);">INTERSTITIAL eCPM:</span> ₹30.00 / 1K IMPS</div>
+          <div><span style="color: var(--neon-green);">BANNER eCPM:</span> ₹10.00 / 1K IMPS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: SPACE DEFENDER GAMEPLAY -->
+    <div id="screen-game" class="screen" style="padding: 0;">
+      <div class="game-viewport">
+        <!-- Canvas Core -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Canvas HUD layer -->
+        <div class="canvas-hud">
+          <div>
+            <div style="color: var(--neon-cyan); font-weight: bold;">SCORE: <span id="game-hud-score">0</span></div>
+            <div style="font-size: 10px; color: #888;">DESTROYED: <span id="game-hud-destroyed">0</span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="color: var(--neon-green); font-weight: bold;">COINS: <span id="game-hud-coins">0</span></div>
+            <div style="font-size: 9px; color: var(--neon-magenta);" id="game-cooldown-text">ANTI-BOT SAFE</div>
+          </div>
+        </div>
+
+        <!-- Overlays (Game Over / Revive / Double Coins) -->
+        <div id="game-overlay-panel" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,5,14,0.9); align-items: center; justify-content: center; flex-direction: column; z-index: 10;">
+          <div class="cyber-card magenta-border" style="width: 85%; max-width: 320px; text-align: center;">
+            <h2 class="neon-text-magenta" style="margin-bottom: 10px;">GAME OVER</h2>
+            <p style="font-size: 13px; margin-bottom: 15px;">Your ship was destroyed by the network node.</p>
+            
+            <div style="background: rgba(0,0,0,0.4); padding: 10px; margin-bottom: 15px; border-radius: 4px; font-size: 12px;">
+              <div>FINAL SCORE: <span id="game-over-final-score" class="neon-text-cyan">0</span></div>
+              <div>EARNED COINS: <span id="game-over-earned-coins" class="neon-text-green">0</span></div>
+              <div style="font-size: 10px; color: #777; margin-top: 5px;">Capped: <span id="game-over-capped">No</span></div>
+            </div>
+
+            <!-- Revive Buttons -->
+            <button class="cyber-btn" id="game-btn-revive" style="font-size: 12px;">WATCH_REWARD_AD_REVIVE</button>
+            <button class="cyber-btn btn-green" id="game-btn-double" style="font-size: 12px;">DOUBLE_COINS_AD</button>
+            <button class="cyber-btn btn-magenta" id="game-btn-exit" style="font-size: 12px;">EXIT_TO_DASHBOARD</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: GLOBAL RANK LEADERBOARD -->
+    <div id="screen-leaderboard" class="screen">
+      <div class="cyber-card cyan-border">
+        <h3 class="neon-text-cyan" style="margin-bottom: 10px;">// CYBER_GLOBAL_RANK</h3>
+        <p style="font-size: 11px; color: #888; margin-bottom: 15px;">
+          Global sync from Firebase RTDB. Compete with elite hackers.
+        </p>
+        
+        <ul class="leaderboard-list" id="leaderboard-container">
+          <li class="leaderboard-item" style="border: none; color: #555;">Connecting to network mesh...</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: SIMULATED WITHDRAWAL PANEL -->
+    <div id="screen-withdrawal" class="screen">
+      <div class="cyber-card green-border">
+        <h3 class="neon-text-green" style="margin-bottom: 10px;">// CYBER_EXCHANGE_PANEL</h3>
+        <p style="font-size: 12px; color: #ccc; line-height: 1.5; margin-bottom: 15px;">
+          Simulated payout gateway. Virtual coins are computed with Estimated eCPM baselines. Accounts must lock processing until the 30th of the month.
+        </p>
+
+        <!-- Dynamic lock info -->
+        <div style="background: rgba(0,0,0,0.3); border: 1px dashed var(--neon-magenta); padding: 12px; font-size: 11px; line-height: 1.5; color: var(--neon-magenta); margin-bottom: 20px;">
+          <div>LOCK_STATUS: ACTIVE</div>
+          <div>DATE_REMAINING: UNTIL THE 30th OF THIS MONTH</div>
+          <div>ESTIMATED TAX CAP: 30% DEDUCTION APPLICABLE</div>
+        </div>
+
+        <form id="withdrawal-form">
+          <div class="form-group">
+            <label for="withdraw-method">EXCHANGE_GATEWAY</label>
+            <select id="withdraw-method" class="cyber-input" style="background: var(--cyber-bg); color: #fff;">
+              <option value="UPI">UPI ADDRESS (Unified Payments Interface)</option>
+              <option value="PAYTM">Paytm Registered Wallet</option>
+              <option value="PAYPAL">PayPal International Account</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="withdraw-address">ACCOUNT_ADDRESS_OR_UPI_ID</label>
+            <input type="text" id="withdraw-address" class="cyber-input" placeholder="e.g. user@ybl or +919876543210" required>
+            <span id="withdraw-address-error" style="font-size: 10px; color: var(--neon-magenta); display: none; margin-top: 5px;"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="withdraw-amount">CONVERT_COIN_QUANTITY</label>
+            <input type="number" id="withdraw-amount" class="cyber-input" placeholder="Minimum 100 Coins" required min="100">
+          </div>
+
+          <!-- Payout Preview Card -->
+          <div class="cyber-card cyan-border" style="background: rgba(0,0,0,0.2); padding: 10px; margin-bottom: 15px;">
+            <div style="font-size: 11px; line-height: 1.6;">
+              <div>Raw Value: <span id="withdraw-raw-val">₹0.00</span></div>
+              <div>Simulated Tax (30%): <span id="withdraw-tax-val" style="color: var(--neon-magenta);">₹0.00</span></div>
+              <div style="font-weight: bold; color: var(--neon-green);">Net Exchange Yield: <span id="withdraw-net-val">₹0.00</span></div>
+            </div>
+          </div>
+
+          <button type="submit" class="cyber-btn btn-green">SUBMIT_EXCHANGE_REQUEST</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- SCREEN 6: SECRET ADMIN DASHBOARD -->
+    <div id="screen-admin" class="screen">
+      <div class="cyber-card secret-terminal">
+        <h3 class="neon-text-magenta" style="margin-bottom: 15px;">// CORE_ADMIN_GATEWAY</h3>
+        
+        <div id="admin-auth-panel">
+          <div class="form-group">
+            <label for="admin-pin">ENTER ADMIN PIN</label>
+            <input type="password" id="admin-pin" class="cyber-input" placeholder="••••">
+          </div>
+          <button class="cyber-btn btn-magenta" id="btn-submit-admin-pin">AUTHORIZE</button>
+        </div>
+
+        <div id="admin-content-panel" style="display: none;">
+          <h4 class="neon-text-green" style="margin-bottom: 10px;">// ROOT_SYSTEM_ACCESS</h4>
+          
+          <div class="cyber-card cyan-border" style="background: rgba(0,0,0,0.4); padding: 10px; margin-bottom: 15px;">
+            <div style="font-size: 11px; line-height: 1.6;">
+              <div>TOTAL_AD_IMPRESSIONS: <span id="admin-total-impressions">0</span></div>
+              <div>SIMULATED_REVENUE: <span id="admin-total-revenue">₹0.00</span></div>
+              <div>ACTIVE_ANTI_BOT_CAPS: <span id="admin-active-caps">0</span></div>
+            </div>
+          </div>
+
+          <!-- Adjust Coins Option -->
+          <div class="form-group">
+            <label for="admin-set-coins">FORCE_USER_COINS</label>
+            <div style="display: flex;">
+              <input type="number" id="admin-set-coins" class="cyber-input" style="flex: 1; margin-right: 10px;" placeholder="Value">
+              <button class="cyber-btn btn-green" id="btn-admin-set-coins" style="width: auto; padding: 10px 15px;">SET</button>
+            </div>
+          </div>
+
+          <button class="cyber-btn" id="btn-admin-export-logs" style="font-size: 11px;">EXPORT_SYSTEM_DIAGNOSTIC_LOGS</button>
+          <button class="cyber-btn btn-magenta" id="btn-admin-exit" style="font-size: 11px;">CLOSE_TERMINAL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM TAB NAVIGATION -->
+    <nav class="bottom-nav" id="bottom-tabs">
+      <div class="nav-tab active" data-target="screen-dashboard">
+        <i>🎮</i>
+        DASHBOARD
+      </div>
+      <div class="nav-tab" data-target="screen-leaderboard">
+        <i>🏆</i>
+        LEADERBOARD
+      </div>
+      <div class="nav-tab" data-target="screen-withdrawal">
+        <i>💰</i>
+        EXCHANGE
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- Load script modules sequentially -->
+  <script src="config.js"></script>
+  <script src="firebase.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
